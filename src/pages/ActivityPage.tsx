@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { mockActivities, mockAgents } from "@/data/mockData";
-import { Search, Filter } from "lucide-react";
+import { useActivity, useAgents } from "@/hooks/useData";
+import { Search } from "lucide-react";
 
 export default function ActivityPage() {
+  const { data: activities = [] } = useActivity();
+  const { data: agents = [] } = useAgents();
   const [search, setSearch] = useState("");
   const [agentFilter, setAgentFilter] = useState("all");
 
-  const filtered = mockActivities.filter((a) => {
+  const filtered = activities.filter((a) => {
     if (agentFilter !== "all" && a.agent_id !== agentFilter) return false;
     if (search && !a.message.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
@@ -35,7 +37,7 @@ export default function ActivityPage() {
           className="text-sm border border-border rounded-md px-3 py-2 bg-card text-foreground"
         >
           <option value="all">All agents</option>
-          {mockAgents.map((a) => (
+          {agents.map((a) => (
             <option key={a.id} value={a.id}>{a.emoji} {a.name}</option>
           ))}
         </select>
@@ -43,7 +45,7 @@ export default function ActivityPage() {
 
       <div className="bg-card border border-border rounded-lg divide-y divide-border">
         {filtered.map((act) => {
-          const agent = mockAgents.find((a) => a.id === act.agent_id);
+          const agent = agents.find((a) => a.id === act.agent_id);
           return (
             <div key={act.id} className="flex items-start gap-3 px-4 py-3">
               <span className={`w-2 h-2 rounded-full mt-2 ${typeColors[act.type] || "bg-muted-foreground"}`} />
@@ -57,7 +59,7 @@ export default function ActivityPage() {
                 </div>
               </div>
               <div className="text-right text-xs text-muted-foreground whitespace-nowrap">
-                {act.cost > 0 && <div className="font-medium text-card-foreground">${act.cost.toFixed(2)}</div>}
+                {Number(act.cost) > 0 && <div className="font-medium text-card-foreground">${Number(act.cost).toFixed(2)}</div>}
                 {act.tokens_in > 0 && <div>{((act.tokens_in + act.tokens_out) / 1000).toFixed(1)}K tokens</div>}
               </div>
             </div>

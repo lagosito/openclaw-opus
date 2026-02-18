@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { mockSkills } from "@/data/mockData";
-import { Skill } from "@/data/types";
+import { useSkills, useUpdateSkill } from "@/hooks/useData";
 
 export default function SkillsPage() {
-  const [skills, setSkills] = useState<Skill[]>(mockSkills);
+  const { data: skills = [] } = useSkills();
+  const updateSkill = useUpdateSkill();
 
-  const toggleSkill = (id: string) => {
-    setSkills((prev) => prev.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s)));
+  const toggleSkill = (id: string, currentEnabled: boolean) => {
+    updateSkill.mutate({ id, enabled: !currentEnabled });
   };
 
   return (
@@ -24,7 +23,7 @@ export default function SkillsPage() {
                 </div>
               </div>
               <button
-                onClick={() => toggleSkill(skill.id)}
+                onClick={() => toggleSkill(skill.id, skill.enabled)}
                 className={`relative w-10 h-5 rounded-full transition-colors ${
                   skill.enabled ? "bg-primary" : "bg-muted"
                 }`}
@@ -36,7 +35,7 @@ export default function SkillsPage() {
                 />
               </button>
             </div>
-            {skill.enabled && Object.keys(skill.config).length > 0 && (
+            {skill.enabled && skill.config && typeof skill.config === "object" && Object.keys(skill.config).length > 0 && (
               <div className="mt-3 p-3 bg-muted rounded-md text-xs text-muted-foreground font-mono">
                 {JSON.stringify(skill.config, null, 2)}
               </div>

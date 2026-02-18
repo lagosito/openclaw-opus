@@ -1,7 +1,9 @@
-import { mockAgents } from "@/data/mockData";
+import { useAgents } from "@/hooks/useData";
 import { Plus } from "lucide-react";
 
 export default function AgentsPage() {
+  const { data: agents = [] } = useAgents();
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -12,7 +14,7 @@ export default function AgentsPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        {mockAgents.map((agent) => (
+        {agents.map((agent) => (
           <div key={agent.id} className="bg-card border border-border rounded-lg p-5 hover:shadow-sm transition-shadow cursor-pointer">
             <div className="flex items-center gap-3 mb-3">
               <span className="text-3xl">{agent.emoji}</span>

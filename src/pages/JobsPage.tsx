@@ -1,7 +1,10 @@
-import { mockJobs, mockAgents } from "@/data/mockData";
+import { useJobs, useAgents } from "@/hooks/useData";
 import { Plus, Clock, Calendar } from "lucide-react";
 
 export default function JobsPage() {
+  const { data: jobs = [] } = useJobs();
+  const { data: agents = [] } = useAgents();
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -12,8 +15,8 @@ export default function JobsPage() {
       </div>
 
       <div className="bg-card border border-border rounded-lg divide-y divide-border">
-        {mockJobs.map((job) => {
-          const agent = mockAgents.find((a) => a.id === job.agent_id);
+        {jobs.map((job) => {
+          const agent = agents.find((a) => a.id === job.agent_id);
           return (
             <div key={job.id} className="flex items-center gap-4 px-5 py-4">
               <div className={`w-2 h-2 rounded-full ${job.enabled ? "bg-success" : "bg-muted-foreground"}`} />
@@ -27,9 +30,7 @@ export default function JobsPage() {
                 </div>
               </div>
               <div className="text-right text-xs text-muted-foreground">
-                {job.last_run && (
-                  <div>Last: {new Date(job.last_run).toLocaleDateString()}</div>
-                )}
+                {job.last_run && <div>Last: {new Date(job.last_run).toLocaleDateString()}</div>}
                 {job.next_run && (
                   <div className="flex items-center gap-1 justify-end">
                     <Calendar size={10} />
