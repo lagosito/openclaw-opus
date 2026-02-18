@@ -14,7 +14,330 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activity: {
+        Row: {
+          agent_id: string | null
+          cost: number
+          created_at: string
+          id: string
+          message: string
+          model: string | null
+          tokens_in: number
+          tokens_out: number
+          type: string
+        }
+        Insert: {
+          agent_id?: string | null
+          cost?: number
+          created_at?: string
+          id?: string
+          message: string
+          model?: string | null
+          tokens_in?: number
+          tokens_out?: number
+          type: string
+        }
+        Update: {
+          agent_id?: string | null
+          cost?: number
+          created_at?: string
+          id?: string
+          message?: string
+          model?: string | null
+          tokens_in?: number
+          tokens_out?: number
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agents: {
+        Row: {
+          created_at: string
+          emoji: string
+          id: string
+          model: string
+          name: string
+          role: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          model?: string
+          name: string
+          role?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          model?: string
+          name?: string
+          role?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      job_runs: {
+        Row: {
+          agent_id: string | null
+          cost: number
+          created_at: string
+          finished_at: string | null
+          id: string
+          job_id: string
+          logs: string | null
+          model: string | null
+          output: string | null
+          started_at: string | null
+          status: string
+          tokens_in: number
+          tokens_out: number
+        }
+        Insert: {
+          agent_id?: string | null
+          cost?: number
+          created_at?: string
+          finished_at?: string | null
+          id?: string
+          job_id: string
+          logs?: string | null
+          model?: string | null
+          output?: string | null
+          started_at?: string | null
+          status?: string
+          tokens_in?: number
+          tokens_out?: number
+        }
+        Update: {
+          agent_id?: string | null
+          cost?: number
+          created_at?: string
+          finished_at?: string | null
+          id?: string
+          job_id?: string
+          logs?: string | null
+          model?: string | null
+          output?: string | null
+          started_at?: string | null
+          status?: string
+          tokens_in?: number
+          tokens_out?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_runs_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_runs_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs: {
+        Row: {
+          agent_id: string | null
+          created_at: string
+          enabled: boolean
+          id: string
+          last_run: string | null
+          name: string
+          next_run: string | null
+          schedule: string
+          timezone: string
+          updated_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          last_run?: string | null
+          name: string
+          next_run?: string | null
+          schedule?: string
+          timezone?: string
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          last_run?: string | null
+          name?: string
+          next_run?: string | null
+          schedule?: string
+          timezone?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      skills: {
+        Row: {
+          config: Json
+          created_at: string
+          description: string
+          enabled: boolean
+          icon: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          description?: string
+          enabled?: boolean
+          icon?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          description?: string
+          enabled?: boolean
+          icon?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      task_runs: {
+        Row: {
+          agent_id: string | null
+          cost: number
+          created_at: string
+          finished_at: string | null
+          id: string
+          logs: string | null
+          model: string | null
+          output: string | null
+          started_at: string | null
+          status: string
+          task_id: string
+          tokens_in: number
+          tokens_out: number
+        }
+        Insert: {
+          agent_id?: string | null
+          cost?: number
+          created_at?: string
+          finished_at?: string | null
+          id?: string
+          logs?: string | null
+          model?: string | null
+          output?: string | null
+          started_at?: string | null
+          status?: string
+          task_id: string
+          tokens_in?: number
+          tokens_out?: number
+        }
+        Update: {
+          agent_id?: string | null
+          cost?: number
+          created_at?: string
+          finished_at?: string | null
+          id?: string
+          logs?: string | null
+          model?: string | null
+          output?: string | null
+          started_at?: string | null
+          status?: string
+          task_id?: string
+          tokens_in?: number
+          tokens_out?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_runs_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_runs_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          agent_id: string | null
+          created_at: string
+          due_at: string | null
+          id: string
+          priority: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          created_at?: string
+          due_at?: string | null
+          id?: string
+          priority?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          created_at?: string
+          due_at?: string | null
+          id?: string
+          priority?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
