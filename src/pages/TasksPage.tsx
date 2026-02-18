@@ -1,8 +1,9 @@
-import { useState } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import { mockTasks, mockAgents } from "@/data/mockData";
-import { Task, TaskStatus } from "@/data/types";
+import { useTasks, useAgents, useUpdateTask } from "@/hooks/useData";
 import { Plus, Search, LayoutGrid, List, ExternalLink, Calendar } from "lucide-react";
+import { useState } from "react";
+
+type TaskStatus = "scheduled" | "queue" | "in-progress" | "done";
 
 const columns: { id: TaskStatus; label: string; dotClass: string }[] = [
   { id: "scheduled", label: "Scheduled", dotClass: "bg-status-scheduled" },
@@ -12,7 +13,9 @@ const columns: { id: TaskStatus; label: string; dotClass: string }[] = [
 ];
 
 export default function TasksPage() {
-  const [tasks, setTasks] = useState<Task[]>(mockTasks);
+  const { data: tasks = [] } = useTasks();
+  const { data: agents = [] } = useAgents();
+  const updateTask = useUpdateTask();
   const [search, setSearch] = useState("");
 
   const filteredTasks = tasks.filter((t) =>
@@ -26,23 +29,19 @@ export default function TasksPage() {
     if (!result.destination) return;
     const taskId = result.draggableId;
     const newStatus = result.destination.droppableId as TaskStatus;
-    setTasks((prev) =>
-      prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t))
-    );
+    updateTask.mutate({ id: taskId, status: newStatus });
   };
 
   const activeTasks = tasks.filter((t) => t.status !== "done").length;
 
   return (
     <div className="space-y-4">
-      {/* Tabs */}
       <div className="flex items-center gap-6 border-b border-border pb-0">
         <button className="text-sm font-medium text-primary border-b-2 border-primary pb-2">Tasks</button>
         <button className="text-sm text-muted-foreground pb-2">Templates <span className="ml-1 text-xs bg-muted rounded px-1.5 py-0.5">6</span></button>
         <button className="text-sm text-muted-foreground pb-2">Recurring <span className="ml-1 text-xs bg-muted rounded px-1.5 py-0.5">6</span></button>
       </div>
 
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Tasks</h1>
@@ -61,7 +60,6 @@ export default function TasksPage() {
         </div>
       </div>
 
-      {/* Search / Filter */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2 bg-card border border-border rounded-md px-3 py-2 flex-1 max-w-md">
           <Search size={14} className="text-muted-foreground" />
@@ -78,7 +76,6 @@ export default function TasksPage() {
         </button>
       </div>
 
-      {/* Kanban */}
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid grid-cols-4 gap-4">
           {columns.map((col) => {
@@ -103,10 +100,10 @@ export default function TasksPage() {
 
                     <div className="space-y-2">
                       {colTasks.map((task, index) => {
-                        const agent = mockAgents.find((a) => a.id === task.agent_id);
-                        const dueDate = new Date(task.due_at);
-                        const dateStr = dueDate.toLocaleDateString("en-US", { weekday: "short", month: "numeric", day: "numeric" });
-                        const timeStr = dueDate.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+                        const agent = agents.find((a) => a.id === task.agent_id);
+                        const dueDate = task.due_at ? new Date(task.due_at) : null;
+                        const dateStr = dueDate?.toLocaleDateString("en-US", { weekday: "short", month: "numeric", day: "numeric" }) || "";
+                        const timeStr = dueDate?.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) || "";
 
                         return (
                           <Draggable key={task.id} draggableId={task.id} index={index}>
@@ -128,10 +125,12 @@ export default function TasksPage() {
                                     <span>{agent?.emoji}</span>
                                     <span>{agent?.name?.substring(0, 4)}{(agent?.name?.length || 0) > 4 ? "..." : ""}</span>
                                   </div>
-                                  <div className={`flex items-center gap-1 ${col.id === "done" ? "bg-secondary/20 text-secondary px-1.5 py-0.5 rounded" : ""}`}>
-                                    <Calendar size={10} />
-                                    <span>{dateStr} {timeStr}</span>
-                                  </div>
+                                  {dueDate && (
+                                    <div className={`flex items-center gap-1 ${col.id === "done" ? "bg-secondary/20 text-secondary px-1.5 py-0.5 rounded" : ""}`}>
+                                      <Calendar size={10} />
+                                      <span>{dateStr} {timeStr}</span>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             )}
