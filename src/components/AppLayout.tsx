@@ -2,19 +2,19 @@ import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Home, Bot, Activity, CheckSquare, Zap, Puzzle, BarChart3,
-  Settings, LogOut, ChevronLeft, ChevronRight, Search
-} from "lucide-react";
+  Settings, LogOut, ChevronLeft, ChevronRight, Search } from
+"lucide-react";
 
 const navItems = [
-  { to: "/", icon: Home, label: "Dashboard" },
-  { to: "/agents", icon: Bot, label: "Agents" },
-  { to: "/activity", icon: Activity, label: "Activity" },
-  { to: "/tasks", icon: CheckSquare, label: "Tasks" },
-  { to: "/skills", icon: Puzzle, label: "Skills" },
-  { to: "/usage", icon: BarChart3, label: "Usage" },
-];
+{ to: "/", icon: Home, label: "Dashboard" },
+{ to: "/agents", icon: Bot, label: "Agents" },
+{ to: "/activity", icon: Activity, label: "Activity" },
+{ to: "/tasks", icon: CheckSquare, label: "Tasks" },
+{ to: "/skills", icon: Puzzle, label: "Skills" },
+{ to: "/usage", icon: BarChart3, label: "Usage" }];
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+
+export default function AppLayout({ children }: {children: React.ReactNode;}) {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
 
@@ -27,52 +27,52 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Sidebar */}
       <aside
         className={`relative flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-200 ${
-          collapsed ? "w-16" : "w-52"
-        }`}
-      >
+        collapsed ? "w-16" : "w-52"}`
+        }>
+
         {/* Gradient accent line on left edge */}
         <div className="absolute left-0 top-0 bottom-0 w-1" style={{ background: "var(--gradient-sidebar)" }} />
 
         {/* Logo */}
         <div className="flex items-center gap-2 px-4 py-4 border-b border-sidebar-border">
           <span className="text-xl">🦞</span>
-          {!collapsed && <span className="font-bold text-foreground text-sm tracking-tight">OpenClaw</span>}
+          {!collapsed && <span className="font-bold text-foreground text-sm tracking-tight">Pablo</span>}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="ml-auto text-muted-foreground hover:text-foreground transition-colors"
-          >
+            className="ml-auto text-muted-foreground hover:text-foreground transition-colors">
+
             {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           </button>
         </div>
 
         {/* Nav */}
         <nav className="flex-1 py-2 space-y-0.5 px-2">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-sidebar-accent text-primary"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                }`
-              }
-            >
+          {navItems.map((item) =>
+          <NavLink
+            key={item.to}
+            to={item.to}
+            className={({ isActive }) =>
+            `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+            isActive ?
+            "bg-sidebar-accent text-primary" :
+            "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"}`
+
+            }>
+
               <item.icon size={18} />
               {!collapsed && <span>{item.label}</span>}
             </NavLink>
-          ))}
+          )}
         </nav>
 
         {/* Bottom */}
         <div className="border-t border-sidebar-border px-2 py-3 space-y-1">
           <div className="flex items-center gap-3 px-3 py-2">
             <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">B</div>
-            {!collapsed && <span className="text-sm font-medium text-foreground">Brian</span>}
+            {!collapsed && <span className="text-sm font-medium text-foreground">Gabriel</span>}
           </div>
-          {!collapsed && (
-            <div className="flex items-center gap-4 px-3 text-muted-foreground">
+          {!collapsed &&
+          <div className="flex items-center gap-4 px-3 text-muted-foreground">
               <button className="flex items-center gap-1 text-xs hover:text-foreground transition-colors">
                 <Settings size={14} /> Settings
               </button>
@@ -80,7 +80,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <LogOut size={14} /> Logout
               </button>
             </div>
-          )}
+          }
         </div>
       </aside>
 
@@ -94,8 +94,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <input
               type="text"
               placeholder="Search tasks, activity, jobs..."
-              className="bg-transparent border-none outline-none text-sm flex-1 text-foreground placeholder:text-muted-foreground"
-            />
+              className="bg-transparent border-none outline-none text-sm flex-1 text-foreground placeholder:text-muted-foreground" />
+
           </div>
           <div className="flex items-center gap-4 text-sm">
             <div className="text-right">
@@ -114,6 +114,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </div>
-    </div>
-  );
+    </div>);
+
 }
