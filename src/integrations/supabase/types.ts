@@ -72,7 +72,7 @@ export type Database = {
         Insert: {
           created_at?: string
           emoji?: string
-          id?: string
+          id: string
           model?: string
           name: string
           role?: string
