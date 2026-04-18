@@ -44,6 +44,29 @@ export function useUpdateTask() {
   });
 }
 
+export function useCreateTask() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (task: { title: string; description?: string; status?: string; priority?: string; due_at?: string | null; tags?: string[]; project?: string | null }) => {
+      const { data, error } = await supabase.from("tasks").insert(task).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["tasks"] }),
+  });
+}
+
+export function useDeleteTask() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("tasks").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["tasks"] }),
+  });
+}
+
 // ── Activity ──
 export function useActivity() {
   return useQuery({
