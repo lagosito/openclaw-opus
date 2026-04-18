@@ -301,30 +301,39 @@ export type Database = {
         Row: {
           agent_id: string | null
           created_at: string
+          description: string | null
           due_at: string | null
           id: string
           priority: string
+          project: string | null
           status: string
+          tags: string[] | null
           title: string
           updated_at: string
         }
         Insert: {
           agent_id?: string | null
           created_at?: string
+          description?: string | null
           due_at?: string | null
           id?: string
           priority?: string
+          project?: string | null
           status?: string
+          tags?: string[] | null
           title: string
           updated_at?: string
         }
         Update: {
           agent_id?: string | null
           created_at?: string
+          description?: string | null
           due_at?: string | null
           id?: string
           priority?: string
+          project?: string | null
           status?: string
+          tags?: string[] | null
           title?: string
           updated_at?: string
         }
