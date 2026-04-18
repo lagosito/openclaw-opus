@@ -4,6 +4,7 @@ import {
   Home, Bot, Activity, CheckSquare, Zap, Puzzle, BarChart3,
   Settings, LogOut, ChevronLeft, ChevronRight, Search } from
 "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const navItems = [
 { to: "/", icon: Home, label: "Dashboard" },
@@ -17,6 +18,7 @@ const navItems = [
 export default function AppLayout({ children }: {children: React.ReactNode;}) {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const { signOut, user } = useAuth();
 
   const now = new Date();
   const dateStr = now.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
@@ -76,7 +78,7 @@ export default function AppLayout({ children }: {children: React.ReactNode;}) {
               <button className="flex items-center gap-1 text-xs hover:text-foreground transition-colors">
                 <Settings size={14} /> Settings
               </button>
-              <button className="flex items-center gap-1 text-xs hover:text-foreground transition-colors">
+              <button onClick={() => signOut()} className="flex items-center gap-1 text-xs hover:text-foreground transition-colors">
                 <LogOut size={14} /> Logout
               </button>
             </div>

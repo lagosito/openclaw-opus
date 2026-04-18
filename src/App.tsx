@@ -4,6 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./components/AppLayout";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./hooks/useAuth";
 import DashboardPage from "./pages/DashboardPage";
 import AgentsPage from "./pages/AgentsPage";
 import ActivityPage from "./pages/ActivityPage";
@@ -11,6 +13,7 @@ import TasksPage from "./pages/TasksPage";
 import UsagePage from "./pages/UsagePage";
 import SkillsPage from "./pages/SkillsPage";
 import JobsPage from "./pages/JobsPage";
+import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,18 +24,30 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AppLayout>
+        <AuthProvider>
           <Routes>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/agents" element={<AgentsPage />} />
-            <Route path="/activity" element={<ActivityPage />} />
-            <Route path="/tasks" element={<TasksPage />} />
-            <Route path="/usage" element={<UsagePage />} />
-            <Route path="/skills" element={<SkillsPage />} />
-            <Route path="/jobs" element={<JobsPage />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route
+              path="*"
+              element={
+                <ProtectedRoute>
+                  <AppLayout>
+                    <Routes>
+                      <Route path="/" element={<DashboardPage />} />
+                      <Route path="/agents" element={<AgentsPage />} />
+                      <Route path="/activity" element={<ActivityPage />} />
+                      <Route path="/tasks" element={<TasksPage />} />
+                      <Route path="/usage" element={<UsagePage />} />
+                      <Route path="/skills" element={<SkillsPage />} />
+                      <Route path="/jobs" element={<JobsPage />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
           </Routes>
-        </AppLayout>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
