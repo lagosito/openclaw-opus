@@ -307,7 +307,7 @@ export type Database = {
           priority: string
           project: string | null
           status: string
-          tags: string[]
+          tags: string[] | null
           title: string
           updated_at: string
         }
@@ -320,7 +320,7 @@ export type Database = {
           priority?: string
           project?: string | null
           status?: string
-          tags?: string[]
+          tags?: string[] | null
           title: string
           updated_at?: string
         }
@@ -333,7 +333,7 @@ export type Database = {
           priority?: string
           project?: string | null
           status?: string
-          tags?: string[]
+          tags?: string[] | null
           title?: string
           updated_at?: string
         }
