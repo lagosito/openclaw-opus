@@ -11,11 +11,15 @@ export interface Agent {
 export interface Task {
   id: string;
   title: string;
-  agent_id: string;
+  description?: string;
+  agent_id?: string;
   status: "scheduled" | "queue" | "in-progress" | "done";
   priority: "low" | "medium" | "high";
-  due_at: string;
+  due_at?: string;
+  tags?: string[];
+  project?: string;
   created_at: string;
+  updated_at: string;
 }
 
 export interface Activity {

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Home, Bot, Activity, CheckSquare, Zap, Puzzle, BarChart3,
   Settings, LogOut, ChevronLeft, ChevronRight, Search } from
@@ -17,6 +18,8 @@ const navItems = [
 export default function AppLayout({ children }: {children: React.ReactNode;}) {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const now = new Date();
   const dateStr = now.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
@@ -76,7 +79,10 @@ export default function AppLayout({ children }: {children: React.ReactNode;}) {
               <button className="flex items-center gap-1 text-xs hover:text-foreground transition-colors">
                 <Settings size={14} /> Settings
               </button>
-              <button className="flex items-center gap-1 text-xs hover:text-foreground transition-colors">
+              <button
+                onClick={async () => { await signOut(); navigate("/login"); }}
+                className="flex items-center gap-1 text-xs hover:text-foreground transition-colors"
+              >
                 <LogOut size={14} /> Logout
               </button>
             </div>
